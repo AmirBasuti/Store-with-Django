@@ -3,19 +3,21 @@ from django.db import models
 
 class Collection(models.Model):
     title = models.CharField(max_length=255)
-
+    featured_product = models.ForeignKey(
+        'Product', on_delete=models.SET_NULL, null=True, related_name='+')
 class Promotion(models.Model):
     description = models.CharField(max_length=255)
     discount = models.FloatField()
     #product_set reply all item that discount applyd to
+
 class Product(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
     inventory = models.IntegerField()
     last_update = models.DateTimeField(auto_now=True)
-    collections = models.ForeignKey(Collection, on_delete=models.CASCADE)
-    promotions = models.ManyToManyField(Promotion)
+    collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
+    promotion = models.ManyToManyField(Promotion)
 
 class Cart(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
