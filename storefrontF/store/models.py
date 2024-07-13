@@ -4,8 +4,10 @@ from django.db import models
 class Collection(models.Model):
     title = models.CharField(max_length=255)
 
-
-# Create your models here.
+class Promotion(models.Model):
+    description = models.CharField(max_length=255)
+    discount = models.FloatField()
+    #product_set reply all item that discount applyd to
 class Product(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -13,7 +15,7 @@ class Product(models.Model):
     inventory = models.IntegerField()
     last_update = models.DateTimeField(auto_now=True)
     collections = models.ForeignKey(Collection, on_delete=models.CASCADE)
-
+    promotions = models.ManyToManyField(Promotion)
 
 class Cart(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
