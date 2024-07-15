@@ -15,8 +15,8 @@ def say_hello(request):
     # resualt = Customer.objects.annotate(total =Sum(F('order__orderitem__unit_price')) * F(
     # 'order__orderitem__quantity')) resualt = Product.objects.annotate(total = Sum(F('orderitem__unit_price') * F(
     # 'orderitem__quantity'))).order_by('-total')[:5]
-
-    content_type = ContentType.objects.get_for_model(Product)
-    resualt = TaggedItem.objects.select_related('tag').filter(content_type= content_type, object_id=1)
+    # content_type = ContentType.objects.get_for_model(Product)
+    # resualt = TaggedItem.objects.select_related('tag').filter(content_type= content_type, object_id=1)
+    resualt = TaggedItem.objects.get_tags_for(Product, 1)
     template = loader.get_template('hello.html')
     return HttpResponse(template.render({'resualt': resualt}, request))
