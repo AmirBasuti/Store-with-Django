@@ -1,9 +1,19 @@
 <!DOCTYPE html>
 <html>
 <body>
+{% if object %}
+    {% for foo in object %}
+    	<h1>{{ foo.customer_id}}</h1>
+{#        <p>{{ foo.last_name }}</p>#}
+    {% endfor %}
 
-<h1>Hello World!</h1>
-<p>Welcome to my first Django project!</p>
+{#	<h1>{{ object.title }}</h1>#}
+{#    <p>{{ object.content }}</p>#}
+{% else %}
+    <h1>Hello World!</h1>
+    <p>Welcome to my first Django project!</p>
+
+{% endif %}
 
 </body>
 </html>

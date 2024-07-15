@@ -5,10 +5,13 @@ class Collection(models.Model):
     title = models.CharField(max_length=255)
     featured_product = models.ForeignKey(
         'Product', on_delete=models.SET_NULL, null=True, related_name='+')
+
+
 class Promotion(models.Model):
     description = models.CharField(max_length=255)
     discount = models.FloatField()
     #product_set reply all item that discount applyd to
+
 
 class Product(models.Model):
     title = models.CharField(max_length=255)
@@ -20,6 +23,7 @@ class Product(models.Model):
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
     promotion = models.ManyToManyField(Promotion)
 
+
 class Cart(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -28,7 +32,7 @@ class Customer(models.Model):
     MEMBERSHIP_BRONZE = 'B'
     MEMBERSHIP_SILVER = 'S'
     MEMBERSHIP_GOLD = 'G'
-    MEMBERSHIP_CHOICES =[
+    MEMBERSHIP_CHOICES = [
         (MEMBERSHIP_BRONZE, "Bronze"),
         (MEMBERSHIP_SILVER, "Silver"),
         (MEMBERSHIP_GOLD, "Gold"),
@@ -43,10 +47,11 @@ class Customer(models.Model):
 
 
 class Adress(models.Model):
-    zip = models.CharField(max_length=255, null=True)
+    # zip = models.CharField(max_length=255, null=True)
     street = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+
 
 class Order(models.Model):
     PEYMENT_STATUS_PENDING = 'P'
@@ -58,7 +63,7 @@ class Order(models.Model):
         (PEYMENT_STATUS_FAILD, "Failed")
     ]
     placed_at = models.DateField(auto_now_add=True)
-    peyment_status = models.CharField(max_length=1, choices=PEYMENT_STATUS, default=PEYMENT_STATUS_PENDING)
+    payment_status = models.CharField(max_length=1, choices=PEYMENT_STATUS, default=PEYMENT_STATUS_PENDING)
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
 
 
