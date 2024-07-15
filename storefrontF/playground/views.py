@@ -1,7 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 from django.template import loader
-from store.models import Product
+from store.models import Product, Collection
 from tags.models import TaggedItem
 
 
@@ -17,6 +17,10 @@ def say_hello(request):
     # 'orderitem__quantity'))).order_by('-total')[:5]
     # content_type = ContentType.objects.get_for_model(Product)
     # resualt = TaggedItem.objects.select_related('tag').filter(content_type= content_type, object_id=1)
-    resualt = TaggedItem.objects.get_tags_for(Product, 1)
-    template = loader.get_template('hello.html')
+    # resualt = TaggedItem.objects.get_tags_for(Product, 1)
+    collection  = Collection()
+    collection.title = 'Video Games'
+    collection.featured_product = Product(pk=1)
+    collection.save()
+    # template = loader.get_template('hello.html')
     return HttpResponse(template.render({'resualt': resualt}, request))
