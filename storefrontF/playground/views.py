@@ -24,16 +24,16 @@ def say_hello(request):
     # collection.save()
     # cart = Cart()
     # cart.save()
-    mio = CartItem.objects.get(pk=2)
-
-    mio.cart = cart
-    mio.product = Product(pk=1)
-    mio.quantity = 2
-    mio.save()
-
-    mio.quantity = 3
-    mio.save()
-
-    mio.delete()
+    # mio = CartItem.objects.get(pk=2)
+    #
+    # mio.cart = cart
+    # mio.product = Product(pk=1)
+    # mio.quantity = 2
+    # mio.save()
+    #
+    # mio.quantity = 3
+    # mio.save()
+    #
+    # mio.delete()
     template = loader.get_template('hello.html')
-    return HttpResponse(template.render({'resualt': resualt}, request))
+    return HttpResponse(template.render())
