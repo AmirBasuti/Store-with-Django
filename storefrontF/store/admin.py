@@ -2,8 +2,7 @@ from django.contrib import admin
 from django.db.models import Count
 from django.utils.html import format_html, urlencode
 from django.urls import reverse
-
-from store.models import Product, Collection, Customer, Order
+from store.models import Product, Collection, Customer, Order, OrderItem
 
 
 class inventoryfilter(admin.SimpleListFilter):
@@ -91,11 +90,17 @@ class CollectionAdmin(admin.ModelAdmin):
         return super().get_queryset(request).annotate(beshmor=Count('product'))
 
 
-# admin.site.register(Collection)
-# /admin.site.register(Product)
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+    autocomplete_fields = ['product']
+    max_num = 10
+    min_num = 1
+    extra = 0
+
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
+    inlines = [OrderItemInline]
     autocomplete_fields = ['customer']
     list_display = ['id', 'placed_at', 'customer']
     list_select_related = ['customer']
