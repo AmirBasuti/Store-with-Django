@@ -5,12 +5,18 @@ from store.models import Product, Collection, Customer
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['title', 'description', 'unit_price']
+    list_display = ['title', 'unit_price', 'inventory_status']
     list_editable = ['unit_price']
     list_per_page = 10
     search_fields = ['title', 'description']
     list_filter = ['last_update', 'collection']
     date_hierarchy = 'last_update'
+    # ordering = ['inventory']
+    @admin.display(ordering='inventory')
+    def inventory_status(self, product):
+        if product.inventory < 10:
+            return 'Low'
+        return 'OK'
 
 
 @admin.register(Customer)
@@ -21,6 +27,8 @@ class CustomerAdmin(admin.ModelAdmin):
     search_fields = ['first_name', 'last_name']
     list_filter = ['membership']
     ordering = ['first_name', 'last_name']
+
+
 # Register your models here.
 
 @admin.register(Collection)
