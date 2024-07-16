@@ -15,14 +15,17 @@ class inventoryfilter(admin.SimpleListFilter):
             ('<10', 'Low'),
             ('>=10', 'OK'),
         ]
+
     def queryset(self, request, queryset):
         if self.value() == '<10':
             return queryset.filter(inventory__lt=10)
         if self.value() == '>=10':
             return queryset.filter(inventory__gte=10)
 
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    actions = ['clear_inventory']
     list_display = ['title', 'unit_price', 'inventory_status', 'collection_title']
     list_editable = ['unit_price']
     list_per_page = 10
@@ -32,6 +35,11 @@ class ProductAdmin(admin.ModelAdmin):
     # ordering = ['inventory']
     list_select_related = ['collection']
 
+    @admin.action(description='Clear inventory')
+    def clear_inventory(self, request, queryset):
+        count = queryset.update(inventory=0)
+        self.message_user(request, f'{count} products were successfully updated', )
+
     def collection_title(self, product):
         return product.collection.title
 
@@ -40,6 +48,8 @@ class ProductAdmin(admin.ModelAdmin):
         if product.inventory < 10:
             return 'Low'
         return 'OK'
+
+
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ['first_name', 'last_name', 'membership', 'orders']
