@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.db.models import Count
+from django.utils.html import format_html, urlencode
+from django.urls import reverse
 
 from store.models import Product, Collection, Customer, Order
 
@@ -27,15 +29,20 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ['first_name', 'last_name', 'membership']
+    list_display = ['first_name', 'last_name', 'membership', 'orders']
     list_editable = ['membership']
     list_per_page = 10
     search_fields = ['first_name', 'last_name']
     list_filter = ['membership']
     ordering = ['first_name', 'last_name']
 
+    # list_select_related = ['order']
+    def orders(self, customer):
+        urls = (reverse('admin:store_order_changelist') +
+                "?" +
+                urlencode({'customer__id': str(customer.id)}))
+        return format_html('<a href= "{}">{}</a>', urls, customer.order_set.count())
 
-# Register your models here.
 
 @admin.register(Collection)
 class CollectionAdmin(admin.ModelAdmin):
@@ -43,9 +50,15 @@ class CollectionAdmin(admin.ModelAdmin):
     list_per_page = 10
     search_fields = ['title']
     ordering = ['title']
+
     @admin.display(ordering='beshmor')
     def product_count(self, collection):
-        return collection.beshmor
+        urls = (reverse('admin:store_product_changelist') +
+                "?" +
+                urlencode({'collection__id': str(collection.id)}))
+
+        return format_html('<a href= "{}">{}</a>', urls, collection.beshmor)
+        # return collection.beshmor
 
     def get_queryset(self, request):
         return super().get_queryset(request).annotate(beshmor=Count('product'))
