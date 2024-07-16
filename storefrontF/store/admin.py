@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db.models import Count
 
 from store.models import Product, Collection, Customer, Order
 
@@ -38,11 +39,16 @@ class CustomerAdmin(admin.ModelAdmin):
 
 @admin.register(Collection)
 class CollectionAdmin(admin.ModelAdmin):
-    list_display = ['title', 'featured_product']
-    list_editable = ['featured_product']
+    list_display = ['title', 'product_count']
     list_per_page = 10
     search_fields = ['title']
     ordering = ['title']
+    @admin.display(ordering='beshmor')
+    def product_count(self, collection):
+        return collection.beshmor
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).annotate(beshmor=Count('product'))
 
 
 # admin.site.register(Collection)
