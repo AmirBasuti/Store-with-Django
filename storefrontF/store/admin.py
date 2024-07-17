@@ -27,16 +27,15 @@ class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {
         'slug': ['title'],
     }
-    autocomplete_fields = ['collection']
-    actions = ['clear_inventory']
     list_display = ['title', 'unit_price', 'inventory_status', 'collection_title']
-    list_editable = ['unit_price']
-    list_per_page = 10
-    search_fields = ['title', 'description']
     list_filter = ['last_update', 'collection', inventoryfilter]
-    date_hierarchy = 'last_update'
-    # ordering = ['inventory']
+    search_fields = ['title', 'description']
+    autocomplete_fields = ['collection']
     list_select_related = ['collection']
+    list_editable = ['unit_price']
+    actions = ['clear_inventory']
+    date_hierarchy = 'last_update'
+    list_per_page = 10
 
     @admin.action(description='Clear inventory')
     def clear_inventory(self, request, queryset):
@@ -56,13 +55,12 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ['first_name', 'last_name', 'membership', 'orders']
-    list_editable = ['membership']
-    list_per_page = 10
-    list_filter = ['membership']
     search_fields = ['first_name__istartswith', 'last_name__istartswith']
     ordering = ['first_name', 'last_name']
+    list_editable = ['membership']
+    list_filter = ['membership']
+    list_per_page = 10
 
-    # list_select_related = ['order']
     def orders(self, customer):
         urls = (reverse('admin:store_order_changelist') +
                 "?" +
@@ -73,9 +71,9 @@ class CustomerAdmin(admin.ModelAdmin):
 @admin.register(Collection)
 class CollectionAdmin(admin.ModelAdmin):
     list_display = ['title', 'product_count']
-    list_per_page = 10
     search_fields = ['title']
     ordering = ['title']
+    list_per_page = 10
 
     @admin.display(ordering='beshmor')
     def product_count(self, collection):
@@ -100,14 +98,14 @@ class OrderItemInline(admin.TabularInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    inlines = [OrderItemInline]
-    autocomplete_fields = ['customer']
+    search_fields = ['customer__first_name', 'customer__last_name']
     list_display = ['id', 'placed_at', 'customer']
     list_select_related = ['customer']
-    list_per_page = 10
-    search_fields = ['customer__first_name', 'customer__last_name']
-    # ordering = ['placed_at']
+    autocomplete_fields = ['customer']
     ordering = ['customer']
+    inlines = [OrderItemInline]
+    list_per_page = 10
+    # ordering = ['placed_at']
     # @admin.display(ordering='placed_at')
     # def customer_name(self, order):
     #     return f'{order.customer.first_name} {order.customer.last_name}'
