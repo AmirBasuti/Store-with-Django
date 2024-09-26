@@ -14,7 +14,7 @@ from store.serializers import ProductSerializer, CollectionSerializer
 
 # Create your views here.
 class ProductList(ListCreateAPIView):
-    queryset = Product.objects.select_related('collection').all()
+    queryset = Product.objects.all()
 
     serializer_class = ProductSerializer
 
