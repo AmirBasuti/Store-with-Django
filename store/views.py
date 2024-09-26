@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.generics import ListCreateAPIView
+from rest_framework.mixins import CreateModelMixin
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -58,17 +59,21 @@ class ProductDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class CollectionList(APIView):
-    def get(self, request:Request):
-        queryset = Collection.objects.prefetch_related('products').all()
-        serializer = CollectionSerializer(queryset, many=True)
-        return Response(serializer.data, status = status.HTTP_202_ACCEPTED)
+class CollectionList(ListCreateAPIView):
+    queryset = Collection.objects.prefetch_related('products').all()
+    serializer_class = CollectionSerializer
 
-    def post(self, request:Request):
-        serializer = CollectionSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status = status.HTTP_201_CREATED)
+    #
+    # def get(self, request:Request):
+    #     queryset = Collection.objects.prefetch_related('products').all()
+    #     serializer = CollectionSerializer(queryset, many=True)
+    #     return Response(serializer.data, status = status.HTTP_202_ACCEPTED)
+    #
+    # def post(self, request:Request):
+    #     serializer = CollectionSerializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.save()
+    #     return Response(serializer.data, status = status.HTTP_201_CREATED)
 
 class CollectionDetail(APIView):
     def get(self, request:Request, pk):
