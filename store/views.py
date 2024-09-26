@@ -15,26 +15,11 @@ from store.serializers import ProductSerializer, CollectionSerializer
 # Create your views here.
 class ProductList(ListCreateAPIView):
     queryset = Product.objects.select_related('collection').all()
-    # def get_queryset(self):
-    #     return Product.objects.select_related('collection').all()
 
     serializer_class = ProductSerializer
-    # def get_serializer_class(self):
-    #     return ProductSerializer
 
     def get_serializer_context(self):
         return {'request':self.request}
-    #
-    # def get(self, request:Request):
-    #     queryset = Product.objects.select_related('collection').all()
-    #     serializer = ProductSerializer(queryset, many=True, context={'request': request})
-    #     return Response(serializer.data)
-    #
-    # def post(self, request:Request):
-    #     serializer = ProductSerializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save()
-    #     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class ProductDetail(RetrieveUpdateDestroyAPIView):
@@ -44,21 +29,6 @@ class ProductDetail(RetrieveUpdateDestroyAPIView):
     def get_serializer_context(self):
         return {'request':self.request}
 
-
-
-    #
-    # def get(self, request:Request, pk):
-    #     product = get_object_or_404(Product, pk=pk)
-    # #     serializer = ProductSerializer(product, context={'request': request})
-    # #     return Response(serializer.data)
-    # #
-    # # def put(self, request:Request, pk):
-    # #     product = get_object_or_404(Product, pk=pk)
-    # #     serializer = ProductSerializer(product, data=request.data)
-    # #     serializer.is_valid(raise_exception=True)
-    # #     serializer.save()
-    # #     return Response(serializer.data)
-    #
     def delete(self, request: Request, pk):
         product = get_object_or_404(Product, pk=pk)
         if product.orderitems.exists():
@@ -72,35 +42,9 @@ class CollectionList(ListCreateAPIView):
     queryset = Collection.objects.prefetch_related('products').all()
     serializer_class = CollectionSerializer
 
-    #
-    # def get(self, request:Request):
-    #     queryset = Collection.objects.prefetch_related('products').all()
-    #     serializer = CollectionSerializer(queryset, many=True)
-    #     return Response(serializer.data, status = status.HTTP_202_ACCEPTED)
-    #
-    # def post(self, request:Request):
-    #     serializer = CollectionSerializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save()
-    #     return Response(serializer.data, status = status.HTTP_201_CREATED)
-
 class CollectionDetail(RetrieveUpdateDestroyAPIView):
     queryset = Collection.objects.all()
     serializer_class = CollectionSerializer
-
-
-
-#     def get(self, request:Request, pk):
-#         collection = get_object_or_404(Collection, pk=pk)
-#         serializer = CollectionSerializer(collection)
-#         return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-#
-#     def put(self, request:Request, pk):
-#         collection = get_object_or_404(Collection, pk=pk)
-#         serializer = CollectionSerializer(collection, data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save()
-#         Response(serializer.data, status= status.HTTP_202_ACCEPTED)
 
     def delete(self, request:Request, pk):
         collection = get_object_or_404(Collection, pk=pk)
