@@ -2,6 +2,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.generics import ListCreateAPIView
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -11,17 +12,28 @@ from store.serializers import ProductSerializer, CollectionSerializer
 
 
 # Create your views here.
-class ProductList(APIView):
-    def get(self, request:Request):
-        queryset = Product.objects.select_related('collection').all()
-        serializer = ProductSerializer(queryset, many=True, context={'request': request})
-        return Response(serializer.data)
+class ProductList(ListCreateAPIView):
+    queryset = Product.objects.select_related('collection').all()
+    # def get_queryset(self):
+    #     return Product.objects.select_related('collection').all()
 
-    def post(self, request:Request):
-        serializer = ProductSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    serializer_class = ProductSerializer
+    # def get_serializer_class(self):
+    #     return ProductSerializer
+
+    def get_serializer_context(self):
+        return {'request':self.request}
+    #
+    # def get(self, request:Request):
+    #     queryset = Product.objects.select_related('collection').all()
+    #     serializer = ProductSerializer(queryset, many=True, context={'request': request})
+    #     return Response(serializer.data)
+    #
+    # def post(self, request:Request):
+    #     serializer = ProductSerializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.save()
+    #     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class ProductDetail(APIView):
