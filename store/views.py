@@ -44,19 +44,21 @@ class ProductDetail(RetrieveUpdateDestroyAPIView):
     def get_serializer_context(self):
         return {'request':self.request}
 
+
+
     #
     # def get(self, request:Request, pk):
     #     product = get_object_or_404(Product, pk=pk)
-    #     serializer = ProductSerializer(product, context={'request': request})
-    #     return Response(serializer.data)
+    # #     serializer = ProductSerializer(product, context={'request': request})
+    # #     return Response(serializer.data)
+    # #
+    # # def put(self, request:Request, pk):
+    # #     product = get_object_or_404(Product, pk=pk)
+    # #     serializer = ProductSerializer(product, data=request.data)
+    # #     serializer.is_valid(raise_exception=True)
+    # #     serializer.save()
+    # #     return Response(serializer.data)
     #
-    # def put(self, request:Request, pk):
-    #     product = get_object_or_404(Product, pk=pk)
-    #     serializer = ProductSerializer(product, data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save()
-    #     return Response(serializer.data)
-
     def delete(self, request: Request, pk):
         product = get_object_or_404(Product, pk=pk)
         if product.orderitems.exists():
@@ -82,18 +84,23 @@ class CollectionList(ListCreateAPIView):
     #     serializer.save()
     #     return Response(serializer.data, status = status.HTTP_201_CREATED)
 
-class CollectionDetail(APIView):
-    def get(self, request:Request, pk):
-        collection = get_object_or_404(Collection, pk=pk)
-        serializer = CollectionSerializer(collection)
-        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+class CollectionDetail(RetrieveUpdateDestroyAPIView):
+    queryset = Collection.objects.all()
+    serializer_class = CollectionSerializer
 
-    def put(self, request:Request, pk):
-        collection = get_object_or_404(Collection, pk=pk)
-        serializer = CollectionSerializer(collection, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        Response(serializer.data, status= status.HTTP_202_ACCEPTED)
+
+
+#     def get(self, request:Request, pk):
+#         collection = get_object_or_404(Collection, pk=pk)
+#         serializer = CollectionSerializer(collection)
+#         return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+#
+#     def put(self, request:Request, pk):
+#         collection = get_object_or_404(Collection, pk=pk)
+#         serializer = CollectionSerializer(collection, data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         Response(serializer.data, status= status.HTTP_202_ACCEPTED)
 
     def delete(self, request:Request, pk):
         collection = get_object_or_404(Collection, pk=pk)
