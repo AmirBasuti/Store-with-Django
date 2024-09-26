@@ -55,12 +55,8 @@ class ProductViewSet(ModelViewSet):
 #         return Response(status=status.HTTP_204_NO_CONTENT)
 #
 
-class CollectionList(ListCreateAPIView):
+class CollectionViewSet(ModelViewSet):
     queryset = Collection.objects.prefetch_related('products').all()
-    serializer_class = CollectionSerializer
-
-class CollectionDetail(RetrieveUpdateDestroyAPIView):
-    queryset = Collection.objects.all()
     serializer_class = CollectionSerializer
 
     def delete(self, request:Request, pk):
@@ -70,3 +66,19 @@ class CollectionDetail(RetrieveUpdateDestroyAPIView):
                             status=status.HTTP_405_METHOD_NOT_ALLOWED)
         collection.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+# class CollectionList(ListCreateAPIView):
+#     queryset = Collection.objects.prefetch_related('products').all()
+#     serializer_class = CollectionSerializer
+#
+# class CollectionDetail(RetrieveUpdateDestroyAPIView):
+#     queryset = Collection.objects.all()
+#     serializer_class = CollectionSerializer
+#
+#     def delete(self, request:Request, pk):
+#         collection = get_object_or_404(Collection, pk=pk)
+#         if collection.products.exists():
+#             return Response({'error': 'Collection cannot be deleted because it is associated with a product'},
+#                             status=status.HTTP_405_METHOD_NOT_ALLOWED)
+#         collection.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
