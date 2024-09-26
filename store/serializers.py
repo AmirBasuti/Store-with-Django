@@ -6,7 +6,7 @@ from store.models import Collection, Product
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
-        fields = ['id', 'title', 'featured_product', 'product_count']
+        fields = ['id', 'title', 'product_count']
 
     product_count = serializers.SerializerMethodField(method_name='calculate_product_count')
 
