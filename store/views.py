@@ -16,7 +16,7 @@ from store.serializers import ProductSerializer, CollectionSerializer
 # Create your views here.
 class ProductViewSet(ModelViewSet):
 
-    queryset = Product.objects.select_related.all()
+    queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
     def get_serializer_context(self):
