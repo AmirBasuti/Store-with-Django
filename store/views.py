@@ -1,6 +1,7 @@
 # from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
+from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -20,7 +21,8 @@ class ProductViewSet(ModelViewSet):
     #     return queryset
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    search_fields = ['title','description']
     # filterset_fields = ['collection_id', 'unit_price']
     filterset_class = ProductFilter
 
