@@ -4,9 +4,11 @@ from rest_framework import status
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.pagination import PageNumberPagination
 
 from .filter import ProductFilter
 from .models import OrderItem
+from .pagination import DefualtPagination
 from .serializers import *
 
 
@@ -24,7 +26,8 @@ class ProductViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     ordering_fields = ['unit_price', 'last_update']
     search_fields = ['title','description']
-
+    # pagination_class = PageNumberPagination
+    pagination_class = DefualtPagination
     # filterset_fields = ['collection_id', 'unit_price']
     filterset_class = ProductFilter
 
